@@ -70,6 +70,9 @@ uv run --python 3.12 python script.py
 # Run tests
 uv run pytest
 
+# Run tests with coverage
+uv run pytest --cov=api --cov-report=term-missing --cov-report=html:htmlcov
+
 # Run linting
 uv run ruff check .
 ```

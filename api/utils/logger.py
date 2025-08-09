@@ -24,13 +24,16 @@ LOGTAIL_TOKEN = os.getenv("LOGTAIL_TOKEN")
 LOGTAIL_HOST = os.getenv("LOGTAIL_HOST", "https://in.logtail.com")
 LOGTAIL_FORCE_USAGE = os.getenv("LOGTAIL_FORCE_USAGE", "").lower()
 
-LOGTAIL_ENABLED = ENVIRONMENT not in ("ci", "test", "development") and LOGTAIL_TOKEN
-
-LOGTAIL_ENABLED = LOGTAIL_TOKEN and LOGTAIL_FORCE_USAGE in (
-    "enabled",
-    "1",
-    "yes",
-    "true",
+LOGTAIL_ENABLED = (
+    ENVIRONMENT not in ("ci", "test", "development")
+    and LOGTAIL_TOKEN
+    and LOGTAIL_FORCE_USAGE
+    in (
+        "enabled",
+        "1",
+        "yes",
+        "true",
+    )
 )
 
 
