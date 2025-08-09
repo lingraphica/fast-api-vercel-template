@@ -1,0 +1,51 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+default_install_hook_types: [pre-commit, pre-push, post-commit]
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-added-large-files
+        stages: [pre-commit] #, pre-push]
+      - id: check-toml
+        stages: [pre-commit]
+      - id: check-merge-conflict
+        stages: [pre-commit] #, pre-push]
+      - id: pretty-format-json
+        stages: [pre-commit]
+        args:
+          - --autofix
+          - --no-sort-keys
+      - id: check-yaml
+        stages: [pre-commit]
+        args:
+          - --unsafe
+      - id: end-of-file-fixer
+        stages: [pre-commit]
+      - id: trailing-whitespace
+        stages: [pre-commit]
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.11.5
+    hooks:
+      - id: ruff
+        stages: [pre-commit]
+        args:
+          - --fix
+      - id: ruff-format
+        stages: [pre-commit]
+  #- repo: https://github.com/major0/pre-commit-exec
+  #  rev: v0.1.2
+  #  hooks:
+  #    - id: shell
+  #      alias: test
+  #      stages: [pre-push]
+  #      language: python
+  #      language_version: python3.12
+  #      always_run: true
+  #      name: Run tests
+  #      args: ["uv run test"]
+
+ci:
+  autofix_prs: true
+  autofix_commit_msg: 🎨 [pre-commit.ci] Auto format from pre-commit.com hooks
+  autoupdate_commit_msg: ⬆ [pre-commit.ci] pre-commit autoupdate
