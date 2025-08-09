@@ -55,7 +55,7 @@ uv add --dev package-name
 uv sync --upgrade
 
 # Generate requirements.txt (needed for vercel deploy)
-uv pip compile pyproject.toml -o requirements.tx
+uv pip compile pyproject.toml -o requirements.txt
 ```
 
 ### Running Commands
