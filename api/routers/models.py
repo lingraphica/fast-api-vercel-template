@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import ORJSONResponse
-from helpers.provider_model import PROVIDER_MODEL_MAP
-from helpers.status_map import STATUS_MAP
-from helpers.auth import get_api_key
+from api.helpers.provider_model import PROVIDER_MODEL_MAP
+from api.helpers.status_map import STATUS_MAP
+from api.helpers.auth import get_api_key
 
 router = APIRouter(dependencies=[Depends(get_api_key)])
 

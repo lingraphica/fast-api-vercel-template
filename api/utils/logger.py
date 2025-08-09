@@ -25,7 +25,7 @@ LOGTAIL_HOST = os.getenv("LOGTAIL_HOST", "https://in.logtail.com")
 LOGTAIL_FORCE_USAGE = os.getenv("LOGTAIL_FORCE_USAGE", "").lower()
 
 LOGTAIL_ENABLED = (
-    ENVIRONMENT not in ("ci", "test", "development")
+    ENVIRONMENT not in ("ci", "test", "development", "dev")
     and LOGTAIL_TOKEN
     and LOGTAIL_FORCE_USAGE
     in (
@@ -35,6 +35,8 @@ LOGTAIL_ENABLED = (
         "true",
     )
 )
+
+LOGTAIL_ENABLED = False  # lol
 
 
 class StreamToLogger:

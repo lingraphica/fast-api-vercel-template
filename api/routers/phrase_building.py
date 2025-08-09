@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import ORJSONResponse
 from typing import Any
-from helpers.auth import get_api_key
-from helpers.phrase_building import PhraseBuildingRequest, build_phrase_from_items
-from helpers.status_map import STATUS_MAP
-from helpers.provider_model import is_valid_provider_model
+from api.helpers.auth import get_api_key
+from api.helpers.phrase_building import PhraseBuildingRequest, build_phrase_from_items
+from api.helpers.status_map import STATUS_MAP
+from api.helpers.provider_model import is_valid_provider_model
 from dotenv import load_dotenv
-from utils.logger import configure_logger
+from api.utils.logger import configure_logger
 
 load_dotenv()
 logger = configure_logger(__name__)

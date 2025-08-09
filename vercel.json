@@ -1,5 +1,5 @@
 {
-  "devCommand": "uv run fastapi dev api/main.py",
+  "devCommand": "uv run python -m fastapi dev api/main.py",
   "builds": [
     {
       "src": "api/main.py",

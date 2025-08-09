@@ -1,11 +1,11 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 from typing import List, Optional
-from helpers.format_util import strip_markdown_code_fences
-from helpers.prompt_generation import create_phrase_building_prompt
-from helpers.litellm_client import get_text_suggestion
+from api.helpers.format_util import strip_markdown_code_fences
+from api.helpers.prompt_generation import create_phrase_building_prompt
+from api.helpers.litellm_client import get_text_suggestion
 import orjson
-from utils.logger import configure_logger
+from api.utils.logger import configure_logger
 
 logger = configure_logger(__name__)
 

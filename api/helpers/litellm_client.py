@@ -1,8 +1,8 @@
 import litellm
-from helpers.provider_model import get_api_key, get_endpoint
+from api.helpers.provider_model import get_api_key, get_endpoint
 from litellm.caching.caching import Cache
 from typing import Any, Dict
-from utils.logger import configure_logger
+from api.utils.logger import configure_logger
 
 # from litellm import acompletion, success_callback
 import os

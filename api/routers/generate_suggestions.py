@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends, Body
 from fastapi.responses import ORJSONResponse
 from typing import Any
-from helpers.generate_suggestions import GenerateSuggestionsRequest, create_response
-from helpers.status_map import STATUS_MAP
-from helpers.provider_model import is_valid_provider_model
-from helpers.prompt_generation import create_prompt
-from helpers.openai_client import get_text_suggestion
-from helpers.amazon_bedrock_client import get_bedrock_text_suggestion
-from helpers.auth import get_api_key
-from utils.logger import configure_logger
+from api.helpers.generate_suggestions import GenerateSuggestionsRequest, create_response
+from api.helpers.status_map import STATUS_MAP
+from api.helpers.provider_model import is_valid_provider_model
+from api.helpers.prompt_generation import create_prompt
+from api.helpers.openai_client import get_text_suggestion
+from api.helpers.amazon_bedrock_client import get_bedrock_text_suggestion
+from api.helpers.auth import get_api_key
+from api.utils.logger import configure_logger
 
 logger = configure_logger(__name__)
 

@@ -1,7 +1,7 @@
 import boto3
 from typing import Any, Dict
 
-from utils.logger import configure_logger
+from api.utils.logger import configure_logger
 
 logger = configure_logger(__name__)
 

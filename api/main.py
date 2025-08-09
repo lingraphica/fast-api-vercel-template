@@ -5,10 +5,10 @@ from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
 from fastapi.middleware.cors import CORSMiddleware
-from routers.generate_suggestions import router as generate_suggestions_router
-from routers.phrase_building import router as phrase_building_router
-from routers.models import router as models_router
-from utils.logger import configure_logger
+from api.routers.generate_suggestions import router as generate_suggestions_router
+from api.routers.phrase_building import router as phrase_building_router
+from api.routers.models import router as models_router
+from api.utils.logger import configure_logger
 
 logger = configure_logger(__name__)
 
