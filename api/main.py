@@ -3,8 +3,12 @@ import httpx
 import uvloop
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
+
+from fastapi.middleware.cors import CORSMiddleware
+from routers.generate_suggestions import router as generate_suggestions_router
+from routers.phrase_building import router as phrase_building_router
+from routers.models import router as models_router
 from utils.logger import configure_logger
-from routers.model import router as model_router
 
 logger = configure_logger(__name__)
 
@@ -39,6 +43,19 @@ async def shutdown_event():
     logger.info("Shutting down FastAPI Vercel Template")
 
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(generate_suggestions_router)
+app.include_router(phrase_building_router)
+app.include_router(models_router)
+
+
 @app.get("/")
 async def read_root():
     return {"Hello": "World"}
@@ -54,6 +71,3 @@ async def test():
     async with httpx.AsyncClient() as client:
         response = await client.get("https://api.github.com")
         return response.json()
-
-
-app.include_router(model_router)
