@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from api.routers.generate_suggestions import router as generate_suggestions_router
 from api.routers.phrase_building import router as phrase_building_router
 from api.routers.models import router as models_router
+from api.routers.completion import router as completion_router
 from api.utils.logger import configure_logger
 
 logger = configure_logger(__name__)
@@ -54,6 +55,7 @@ app.add_middleware(
 app.include_router(generate_suggestions_router)
 app.include_router(phrase_building_router)
 app.include_router(models_router)
+app.include_router(completion_router)
 
 
 @app.get("/")

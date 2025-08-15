@@ -84,6 +84,7 @@ def configure_logger(
     - Uncaught exception handling
     - Stream redirection (stdout/stderr)
     - Environment variable configuration
+    - Fallback to stderr on file system errors
 
     Args:
         name: Name of the logger (usually __name__)
@@ -105,15 +106,31 @@ def configure_logger(
     # Create formatter
     formatter = logging.Formatter(LOG_FORMAT)
 
-    # File handler with rotation
+    # File handler with rotation - with error handling for read-only file systems
     file_path = log_file or LOG_FILE
-    file_handler = RotatingFileHandler(
-        file_path, maxBytes=MAX_LOG_SIZE, backupCount=BACKUP_COUNT
-    )
-    file_handler.setFormatter(formatter)
-    logger.addHandler(file_handler)
+    file_handler = None
 
-    # Console handler
+    try:
+        # Test if we can write to the file system
+        test_file = f"{file_path}.test"
+        with open(test_file, "w") as f:
+            f.write("test")
+        os.remove(test_file)
+
+        # If we can write, create the file handler
+        file_handler = RotatingFileHandler(
+            file_path, maxBytes=MAX_LOG_SIZE, backupCount=BACKUP_COUNT
+        )
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
+
+    except (OSError, IOError, PermissionError) as e:
+        # File system is read-only or we can't create files
+        error_msg = f"Warning: Cannot create log file '{file_path}': {str(e)}. Falling back to stderr."
+        sys.stderr.write(f"{error_msg}\n")
+        sys.stderr.flush()
+
+    # Console handler (always add this as fallback)
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
