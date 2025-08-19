@@ -3,8 +3,7 @@ from fastapi.responses import ORJSONResponse
 from typing import Any
 from api.helpers.status_map import STATUS_MAP
 from api.helpers.provider_model import is_valid_provider_model
-from api.helpers.openai_client import get_text_suggestion
-from api.helpers.amazon_bedrock_client import get_bedrock_text_suggestion
+from api.helpers.litellm_client import get_text_suggestion
 from api.helpers.auth import get_api_key
 from api.utils.logger import configure_logger
 from pydantic import BaseModel
@@ -63,36 +62,27 @@ async def completion(
 
     # Provider/model selection
     selected_provider = "bedrock"
-    selected_model = "us.meta.llama3-2-11b-instruct-v1:0"
+    selected_model = "amazon.nova-lite-v1:0"
     if is_valid_provider_model(req.provider, req.model):
         selected_provider = req.provider
         selected_model = req.model
 
     try:
-        if selected_provider == "bedrock":
-            reply = await get_bedrock_text_suggestion(
-                req.prompt,
-                selected_model,
-                req.system_prompt,
-                req.temperature,
-                req.max_tokens,
-                req.top_p,
-            )
-        else:
-            reply = await get_text_suggestion(
-                req.prompt,
-                selected_model,
-                selected_provider,
-                req.system_prompt,
-                req.temperature,
-                req.max_tokens,
-                req.top_p,
-            )
+        # Use litellm client for all providers
+        result = await get_text_suggestion(
+            prompt=req.prompt,
+            model=selected_model,
+            provider=selected_provider,
+            system_prompt=req.system_prompt,
+            temperature=req.temperature,
+            max_tokens=req.max_tokens,
+            top_p=req.top_p,
+        )
 
-        logger.info(f"Model reply: {reply}")
+        logger.info(f"Model reply: {result}")
 
         response_data = CompletionResponse(
-            text=reply, model=selected_model, provider=selected_provider
+            text=result["content"], model=selected_model, provider=selected_provider
         )
 
         return ORJSONResponse(

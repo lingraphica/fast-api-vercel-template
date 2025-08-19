@@ -63,6 +63,7 @@ async def get_text_suggestion(
     model: str,
     provider: str = "openai",
     system_prompt: str = "",
+    messages: list = [],
     temperature: float = 0.2,
     max_tokens: int = 500,
     top_p: float = 0.8,
@@ -90,10 +91,11 @@ async def get_text_suggestion(
             raise RuntimeError(
                 f"{provider} API key is not set (or model-specific key missing)"
             )
-    messages = [
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": prompt},
-    ]
+    if not messages or len(messages) <= 0:
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": prompt},
+        ]
     try:
         response = await litellm.acompletion(
             model=f"{provider}/{model}",
