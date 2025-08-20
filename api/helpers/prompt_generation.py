@@ -55,7 +55,7 @@ def create_prompt(
     num_replies: int,
     mood: Optional[str] = None,
     complexity_level: int = 3,
-    previous_suggestions: Optional[List[str]] = None,
+    previous_attempts: Optional[List[str]] = None,
     context: Optional[List[str]] = None,
     num_emojis: int = 0,
 ) -> str:
@@ -65,8 +65,8 @@ def create_prompt(
     if mood:
         prompt += f"\nMOOD and TONE: {mood}"
         prompt += "\nHeavily consider the mood."
-    if previous_suggestions:
-        last_ten = previous_suggestions[-10:]
+    if previous_attempts:
+        last_ten = previous_attempts[-10:]
         prompt += (
             f"\nThese are previous suggestions that the user did not like: {last_ten}"
         )

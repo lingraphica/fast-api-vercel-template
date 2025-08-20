@@ -19,19 +19,16 @@ router = APIRouter(dependencies=[Depends(get_api_key)])
 async def generate_suggestions(
     req: GenerateSuggestionsRequest = Body(
         default={
-            "text": "How are you doing today?",
-            "objective": "Affirm",
-            "num_replies": 2,
-            "model": "us.meta.llama3-2-11b-instruct-v1:0",
+            "text": "Do you want to watch stay inside and watch a movie, or go for a walk?",
+            "objective": "affirm",
+            "num_replies": 1,
+            "mode": "",
+            "mood": "Neutral",
+            "previousAttempts": [],
             "provider": "bedrock",
-            "mood": "neutral",
-            "complexity": 1,
-            "num_emojis": 0,
-            "previous_suggestions": ["Im doing great thanks"],
             "context": [],
-            "temperature": 0.9,
-            "max_tokens": 500,
-            "top_p": 0.8,
+            "model": "amazon.nova-lite-v1:0",
+            "temperature": 0.7,
         }
     ),
 ):
@@ -51,15 +48,13 @@ async def generate_suggestions(
             headers=headers,
         )
     # Provider/model selection
-    selected_provider = "bedrock"
-    selected_model = "us.meta.llama3-2-11b-instruct-v1:0"
-    if is_valid_provider_model(req.provider, req.model):
-        selected_provider = req.provider
-        selected_model = req.model
-    selected_num_emojis = (
-        req.num_emojis if req.num_emojis and 0 <= req.num_emojis <= 10 else 0
-    )
-    selected_mood = req.mood or ""
+    selected_provider = req.provider or "bedrock"
+    selected_model = req.model or "us.meta.llama3-2-11b-instruct-v1:0"
+    if is_valid_provider_model(selected_provider, selected_model):
+        selected_provider = selected_provider
+        selected_model = selected_model
+    selected_num_emojis = req.num_emojis or 0
+    selected_mood = req.mood or "Neutral"
     system_prompt = (
         "You are a communication assistant for people with language difficulties. \n"
         "For every phrase, generate:\n"
@@ -72,9 +67,9 @@ async def generate_suggestions(
         req.objective,
         req.num_replies,
         selected_mood,
-        req.complexity,
-        req.previous_suggestions,
-        req.context,
+        req.complexity or 1,
+        req.previousAttempts or [],
+        req.context or [],
         selected_num_emojis,
     )
     try:
@@ -83,9 +78,9 @@ async def generate_suggestions(
                 prompt,
                 selected_model,
                 system_prompt,
-                req.temperature,
-                req.max_tokens,
-                req.top_p,
+                req.temperature or 0.7,
+                req.max_tokens or 500,
+                req.top_p or 0.8,
             )
         else:
             reply = await get_text_suggestion(
@@ -93,9 +88,9 @@ async def generate_suggestions(
                 selected_model,
                 selected_provider,
                 system_prompt,
-                req.temperature,
-                req.max_tokens,
-                req.top_p,
+                req.temperature or 0.7,
+                req.max_tokens or 500,
+                req.top_p or 0.8,
             )
         logger.info(f"Model reply: {reply}")
         data = create_response(req.text, reply, selected_model)

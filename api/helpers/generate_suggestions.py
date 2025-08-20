@@ -17,19 +17,20 @@ class Suggestion(BaseModel):
 
 
 class GenerateSuggestionsRequest(BaseModel):
-    text: str = Field(..., min_length=1)  # Minimum of 1 character
-    objective: str = Field(..., min_length=1)  # Minimum of 1 character
-    num_replies: int = Field(..., ge=1)  # Minimum of 1 reply
-    model: Optional[str] = None
-    mood: Optional[str] = None
-    complexity: Optional[int] = Field(..., ge=1, le=3)  # Minimum of 1, maximum of 3
-    previous_suggestions: Optional[List[str]] = None
+    text: str = Field(..., min_length=1)  # Required: Minimum of 1 character
+    objective: str = Field(..., min_length=1)  # Required: Minimum of 1 character
+    num_replies: int = Field(..., ge=1)  # Required: Minimum of 1 reply
+    mode: Optional[str] = None
+    mood: Optional[str] = "Neutral"
+    previousAttempts: Optional[List[str]] = None
+    provider: Optional[str] = "bedrock"
     context: Optional[List[str]] = None
-    provider: Optional[str] = None
-    temperature: Optional[float] = Field(..., ge=0, le=1)  # Minimum of 0, maximum of 1
-    max_tokens: Optional[int] = Field(..., ge=1)  # Minimum of 1 token
-    top_p: Optional[float] = Field(..., ge=0, le=1)  # Minimum of 0, maximum of 1
-    num_emojis: Optional[int] = Field(..., ge=0)  # Minimum of 0 emojis
+    model: Optional[str] = None
+    temperature: Optional[float] = Field(0.7, ge=0, le=1)  # Default 0.7, min 0, max 1
+    max_tokens: Optional[int] = Field(500, ge=1)  # Default 500, minimum of 1 token
+    top_p: Optional[float] = Field(0.8, ge=0, le=1)  # Default 0.8, min 0, max 1
+    complexity: Optional[int] = Field(1, ge=1, le=3)  # Default 1, min 1, max 3
+    num_emojis: Optional[int] = Field(0, ge=0, le=10)  # Default 0, min 0, max 10
 
 
 class GenerateSuggestionsResponse(BaseModel):
